@@ -10,14 +10,15 @@ const (
 	envURL   = "HOWTOCOMMAND_URL"
 	envModel = "HOWTOCOMMAND_MODEL"
 	envToken = "HOWTOCOMMAND_TOKEN"
+	cmdName  = "how2cmd"
 )
 
 func main() {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "用法: %s <描述你想要执行的操作>\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "用法: %s <描述你想要执行的操作>\n", cmdName)
 		fmt.Fprintf(os.Stderr, "\n示例:\n")
-		fmt.Fprintf(os.Stderr, "  %s 如何查看当前目录下的所有文件\n", os.Args[0])
-		fmt.Fprintf(os.Stderr, "  %s 如何压缩当前文件夹\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "  %s 如何查看当前目录下的所有文件\n", cmdName)
+		fmt.Fprintf(os.Stderr, "  %s 如何压缩当前文件夹\n", cmdName)
 		fmt.Fprintf(os.Stderr, "\n环境变量:\n")
 		fmt.Fprintf(os.Stderr, "  %s: API地址\n", envURL)
 		fmt.Fprintf(os.Stderr, "  %s: 模型名称\n", envModel)
