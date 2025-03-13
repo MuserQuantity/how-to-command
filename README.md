@@ -6,6 +6,9 @@
 
 ```bash
 git clone https://github.com/MuserQuantity/how-to-command.git
+# windows下
+go build -o $env:GOPATH\bin\how2cmd.exe
+# linux下
 go build -o $GOPATH/bin/how2cmd
 ```
 
