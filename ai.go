@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -59,6 +60,9 @@ func askAI(apiURL, model, token, currentDir string, files []string, query string
 		return "", fmt.Errorf("JSON编码失败: %v", err)
 	}
 
+	// 打印请求信息，帮助调试
+	fmt.Fprintf(os.Stderr, "发送请求到: %s\n", apiURL)
+
 	req, err := http.NewRequest("POST", apiURL, bytes.NewBuffer(jsonData))
 	if err != nil {
 		return "", fmt.Errorf("创建请求失败: %v", err)
@@ -74,6 +78,24 @@ func askAI(apiURL, model, token, currentDir string, files []string, query string
 	}
 	defer resp.Body.Close()
 
+	// 检查HTTP状态码
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("服务器返回错误代码: %d %s", resp.StatusCode, resp.Status)
+	}
+
+	// 检查Content-Type
+	contentType := resp.Header.Get("Content-Type")
+	if !strings.Contains(contentType, "application/json") {
+		// 读取响应内容用于调试
+		bodyBytes, _ := io.ReadAll(resp.Body)
+		bodyStr := string(bodyBytes)
+		// 截断过长的响应
+		if len(bodyStr) > 200 {
+			bodyStr = bodyStr[:200] + "..."
+		}
+		return "", fmt.Errorf("服务器返回了非JSON内容 (Content-Type: %s): %s", contentType, bodyStr)
+	}
+
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return "", fmt.Errorf("读取响应失败: %v", err)
@@ -81,7 +103,12 @@ func askAI(apiURL, model, token, currentDir string, files []string, query string
 
 	var result ChatResponse
 	if err := json.Unmarshal(body, &result); err != nil {
-		return "", fmt.Errorf("JSON解码失败: %v", err)
+		// 如果JSON解析失败，打印部分响应内容以便调试
+		bodyStr := string(body)
+		if len(bodyStr) > 200 {
+			bodyStr = bodyStr[:200] + "..."
+		}
+		return "", fmt.Errorf("JSON解码失败: %v\n响应内容: %s", err, bodyStr)
 	}
 
 	if result.Error != nil {

@@ -39,8 +39,31 @@ func main() {
 	token := os.Getenv(envToken)
 
 	// 验证环境变量
-	if apiURL == "" || model == "" || token == "" {
-		fmt.Fprintf(os.Stderr, "错误: 请设置必要的环境变量\n")
+	var missingVars []string
+	if apiURL == "" {
+		missingVars = append(missingVars, envURL)
+	}
+	if model == "" {
+		missingVars = append(missingVars, envModel)
+	}
+	if token == "" {
+		missingVars = append(missingVars, envToken)
+	}
+
+	if len(missingVars) > 0 {
+		fmt.Fprintf(os.Stderr, "错误: 以下环境变量未设置:\n")
+		for _, v := range missingVars {
+			fmt.Fprintf(os.Stderr, "  - %s\n", v)
+		}
+		fmt.Fprintf(os.Stderr, "\n环境变量设置示例:\n")
+		fmt.Fprintf(os.Stderr, "  - Windows (PowerShell):\n")
+		fmt.Fprintf(os.Stderr, "    $env:%s = \"https://api.openai.com/v1/chat/completions\"\n", envURL)
+		fmt.Fprintf(os.Stderr, "    $env:%s = \"gpt-4o-2024-05-13\"\n", envModel)
+		fmt.Fprintf(os.Stderr, "    $env:%s = \"sk-your-api-token\"\n", envToken)
+		fmt.Fprintf(os.Stderr, "\n  - Linux/macOS:\n")
+		fmt.Fprintf(os.Stderr, "    export %s=\"https://api.openai.com/v1/chat/completions\"\n", envURL)
+		fmt.Fprintf(os.Stderr, "    export %s=\"gpt-4o-2024-05-13\"\n", envModel)
+		fmt.Fprintf(os.Stderr, "    export %s=\"sk-your-api-token\"\n", envToken)
 		os.Exit(1)
 	}
 

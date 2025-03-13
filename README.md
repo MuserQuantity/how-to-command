@@ -5,7 +5,8 @@
 ## 安装
 
 ```bash
-go install github.com/MuserQuantity/how-to-command@latest
+git clone https://github.com/MuserQuantity/how-to-command.git
+go build -o $GOPATH/bin/how2cmd
 ```
 
 ## 环境变量设置
@@ -15,6 +16,20 @@ go install github.com/MuserQuantity/how-to-command@latest
 - `HOWTOCOMMAND_URL`: API 接口地址（例如：https://api.openai.com/v1/chat/completions）
 - `HOWTOCOMMAND_MODEL`: 使用的模型名称（例如：gpt-4o-2024-05-13）
 - `HOWTOCOMMAND_TOKEN`: API 访问令牌
+
+### windows下的设置
+```
+set HOWTOCOMMAND_URL=https://api.openai.com/v1/chat/completions
+set HOWTOCOMMAND_MODEL=gpt-4o-2024-05-13
+set HOWTOCOMMAND_TOKEN=sk-proj-1234567890
+```
+
+### linux下的设置
+```
+export HOWTOCOMMAND_URL=https://api.openai.com/v1/chat/completions
+export HOWTOCOMMAND_MODEL=gpt-4o-2024-05-13
+export HOWTOCOMMAND_TOKEN=sk-proj-1234567890
+```
 
 ## 使用方法
 
