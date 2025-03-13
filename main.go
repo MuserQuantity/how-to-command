@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"runtime"
 )
 
 const (
@@ -17,8 +18,19 @@ func main() {
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "用法: %s <描述你想要执行的操作>\n", cmdName)
 		fmt.Fprintf(os.Stderr, "\n示例:\n")
-		fmt.Fprintf(os.Stderr, "  %s 如何查看当前目录下的所有文件\n", cmdName)
-		fmt.Fprintf(os.Stderr, "  %s 如何压缩当前文件夹\n", cmdName)
+		if runtime.GOOS == "windows" {
+			fmt.Fprintf(os.Stderr, "  %s 如何查看当前目录下的所有文件\n", cmdName)
+			fmt.Fprintf(os.Stderr, "  %s 如何创建一个新文件夹并移动所有txt文件到其中\n", cmdName)
+			fmt.Fprintf(os.Stderr, "  %s 如何查找所有大于10MB的文件\n", cmdName)
+		} else if runtime.GOOS == "darwin" {
+			fmt.Fprintf(os.Stderr, "  %s 如何查看当前目录下的所有文件\n", cmdName)
+			fmt.Fprintf(os.Stderr, "  %s 如何压缩当前文件夹\n", cmdName)
+			fmt.Fprintf(os.Stderr, "  %s 如何查找所有大于10MB的文件\n", cmdName)
+		} else {
+			fmt.Fprintf(os.Stderr, "  %s 如何查看当前目录下的所有文件\n", cmdName)
+			fmt.Fprintf(os.Stderr, "  %s 如何压缩当前文件夹\n", cmdName)
+			fmt.Fprintf(os.Stderr, "  %s 如何查找所有大于10MB的文件\n", cmdName)
+		}
 		fmt.Fprintf(os.Stderr, "\n环境变量:\n")
 		fmt.Fprintf(os.Stderr, "  %s: API地址\n", envURL)
 		fmt.Fprintf(os.Stderr, "  %s: 模型名称\n", envModel)
@@ -56,14 +68,18 @@ func main() {
 			fmt.Fprintf(os.Stderr, "  - %s\n", v)
 		}
 		fmt.Fprintf(os.Stderr, "\n环境变量设置示例:\n")
-		fmt.Fprintf(os.Stderr, "  - Windows (PowerShell):\n")
-		fmt.Fprintf(os.Stderr, "    $env:%s = \"https://api.openai.com/v1/chat/completions\"\n", envURL)
-		fmt.Fprintf(os.Stderr, "    $env:%s = \"gpt-4o-2024-05-13\"\n", envModel)
-		fmt.Fprintf(os.Stderr, "    $env:%s = \"sk-your-api-token\"\n", envToken)
-		fmt.Fprintf(os.Stderr, "\n  - Linux/macOS:\n")
-		fmt.Fprintf(os.Stderr, "    export %s=\"https://api.openai.com/v1/chat/completions\"\n", envURL)
-		fmt.Fprintf(os.Stderr, "    export %s=\"gpt-4o-2024-05-13\"\n", envModel)
-		fmt.Fprintf(os.Stderr, "    export %s=\"sk-your-api-token\"\n", envToken)
+
+		if runtime.GOOS == "windows" {
+			fmt.Fprintf(os.Stderr, "  - Windows (PowerShell):\n")
+			fmt.Fprintf(os.Stderr, "    $env:%s = \"https://api.openai.com/v1/chat/completions\"\n", envURL)
+			fmt.Fprintf(os.Stderr, "    $env:%s = \"gpt-4o-2024-05-13\"\n", envModel)
+			fmt.Fprintf(os.Stderr, "    $env:%s = \"sk-your-api-token\"\n", envToken)
+		} else {
+			fmt.Fprintf(os.Stderr, "  - Linux/macOS:\n")
+			fmt.Fprintf(os.Stderr, "    export %s=\"https://api.openai.com/v1/chat/completions\"\n", envURL)
+			fmt.Fprintf(os.Stderr, "    export %s=\"gpt-4o-2024-05-13\"\n", envModel)
+			fmt.Fprintf(os.Stderr, "    export %s=\"sk-your-api-token\"\n", envToken)
+		}
 		os.Exit(1)
 	}
 
