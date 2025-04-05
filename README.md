@@ -10,6 +10,8 @@ git clone https://github.com/MuserQuantity/how-to-command.git
 go build -o $env:GOPATH\bin\how2cmd.exe
 # linux下
 go build -o $GOPATH/bin/how2cmd
+# 非root用户，需要使用sudo
+sudo $(which go) build -o $GOPATH/bin/how2cmd
 ```
 
 ## 环境变量设置
